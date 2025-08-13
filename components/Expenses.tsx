@@ -1,14 +1,24 @@
-import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
-
-import { useExpense } from "@/hooks/useExpenses";
+import React, { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Expense, getExpenses } from '../services/expenses';
 
 type ExpensesProps = {
   limit?: number;
 };
 
-export const Expenses = ({ limit }: ExpensesProps) => {
-  const { expenses, loading } = useExpense({limit});
+export default function Expenses({ limit }: ExpensesProps) {
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getExpenses(limit);
+      setExpenses(data);
+      setLoading(false);
+    };
+
+    fetchData();
+  }, [limit]);
 
   if (loading) {
     return (
@@ -28,11 +38,9 @@ export const Expenses = ({ limit }: ExpensesProps) => {
 
   return (
     <View style={styles.container}>
-      {limit ? (
-        <Text style={styles.title}>Últimos {limit} gastos</Text>
-      ) : (
-        <Text style={styles.title}>Todos los gastos</Text>
-      )}
+      <Text style={styles.title}>
+        {limit ? `Últimos ${limit} gastos` : 'Todos los gastos'}
+      </Text>
       <FlatList
         data={expenses}
         keyExtractor={(item) => item.id!}
@@ -47,26 +55,26 @@ export const Expenses = ({ limit }: ExpensesProps) => {
       />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
-    paddingHorizontal: 15,
+    paddingHorizontal: 15
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
+    fontWeight: 'bold',
+    marginBottom: 10
   },
   card: {
-    backgroundColor: "#f1f1f1",
+    backgroundColor: '#f1f1f1',
     padding: 12,
     borderRadius: 8,
-    marginBottom: 8,
+    marginBottom: 8
   },
   name: {
     fontSize: 16,
-    fontWeight: "600",
-  },
+    fontWeight: '600'
+  }
 });

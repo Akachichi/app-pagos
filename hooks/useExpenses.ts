@@ -2,7 +2,7 @@ import {
     Expense,
     getAllExpenses,
     getLastExpenses,
-} from "@/app/services/expenses";
+} from "@/services/expenses";
 import { useEffect, useState } from "react";
 
 type ExpensesProps = {

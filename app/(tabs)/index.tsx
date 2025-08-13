@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useExpense } from '@/hooks/useExpenses';
 
 export default function HomeScreen() {
-  const {expenses, loading} = useExpense({})
+  const {loading} = useExpense({})
 
   if (loading) {
     return <View>
